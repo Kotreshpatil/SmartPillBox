@@ -33,18 +33,22 @@ namespace sqlconnectionapp
                         {
                             case 0:
                                 A.UpdateDbMethod('P', 0, 0);
+                                i = 0;
                                 Environment.Exit(1);
                                 break;
                             case 1:
                                 A.UpdateDbMethod('R', 0, 0);
+                                i = 0;
                                 Environment.Exit(1);
                                 break;
                             case 2:
                                 A.UpdateDbMethod('L', 0, 0);
+                                i = 0;
                                 Environment.Exit(1);
                                 break;
                             case 3:
                                 A.UpdateDbMethod('S', 0, 0);
+                                i = 0;
                                 Program sms = new Program();
                                 sms.SmsMethod();
                                 Environment.Exit(1);
