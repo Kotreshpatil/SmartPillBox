@@ -1,48 +1,48 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 using System.Device.Gpio;
+using System.Reflection;
+
 namespace sqlconnectionapp
 {
     public class LDR
     {
         public void LdrMethod()
         {
-            int mpin = 17;
-            int tpin = 27;
-            double cap = 0.000001;
-            double adj = 2.130620985;
-            int i, t = 0;
+            double value = 0; //used to store LDR value
+            int ldr = 17;
+            int led = 11;
+            GpioController gpioController = new GpioController();
+            gpioController.OpenPin(led, PinMode.Output);
+
+            static int rcTime(int ldr)
+            {
+                int count = 0;
+                GpioController gpioController = new GpioController();
+                gpioController.SetPinMode(ldr, PinMode.Output);
+                gpioController.Write(ldr, false);
+                System.Threading.Thread.Sleep(2);
+                gpioController.SetPinMode(ldr, PinMode.Input);
+                while (gpioController.Read(ldr) == 0)
+                {
+                    count++;
+                }
+
+                return count;
+            }
             while (true)
             {
-                GpioController controller = new GpioController;
-                controller.OpenPin(mpin, PinMode.Output);
-                controller.OpenPin(tpin, PinMode.Output);
-                controller.Write(mpin, PinValue.Low);
-                controller.Write(tpin, PinValue.Low);
-                System.Threading.Thread.Sleep(2);
-                controller.OpenPin(mpin, PinMode.Input);
-                System.Threading.Thread.Sleep(2);
-                controller.Write(mpin, PinValue.High);
-                //DateTime starttime = DateTime.UtcNow;
-                //DateTime endtime = DateTime.UtcNow;
-                //while (controller.OpenPin(mpin, PinMode.Input) == PinValue.Low)
-                //{
-                    //endtime = DateTime.UtcNow;
-                //}
-                //double measuredresistance = endtime - starttime;
-                //double res = (measuredresistance / cap) * adj;
-                //i = i + 1;
-                //t = t + res
-                //if (i == 10)
-                //{
-                    //t = t / i;
-                    //Console(t);
-                    //DbUpdate A = new DbUpdate();
-                    //A.UpdateDbMethod(' ', 0, 1);
-                //}
-               // i = 0;
-               // t = 0;
+                Console.WriteLine("The LDR Values are");
+                value = rcTime(ldr);
+                Console.WriteLine(value);
+                if (value >= 100000)
+                {
+                    DbUpdate A = new DbUpdate();
+                    A.UpdateDbMethod(' ', 0, 1);
+                }
+
             }
         }
     }
